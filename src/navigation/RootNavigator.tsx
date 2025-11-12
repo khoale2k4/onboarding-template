@@ -26,7 +26,7 @@ export default function RootNavigator() {
   }, []);
 
   if (loading) {
-    return null; // hoặc một màn hình splash đơn giản
+    return null;
   }
 
   return (
