@@ -58,9 +58,11 @@ yarn start
 
 4. App sẽ load trên điện thoại:
 
-Nếu là lần đầu mở → sẽ hiển thị Onboarding Screen.
+- Nếu là lần đầu mở → sẽ hiển thị Onboarding Screen.
 
-Lần tiếp theo → sẽ trực tiếp vào Home Screen.
+- Lần tiếp theo → sẽ trực tiếp vào Home Screen.
+
+---
 
 ## Thư mục chính
 ```bash
