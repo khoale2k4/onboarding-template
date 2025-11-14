@@ -29,8 +29,8 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EAS_ACCESS_TOKEN }}
 
-      # - name: EAS Build (Preview)
-      #   run: eas build --platform android --non-interactive
+      - name: EAS Build
+        run: eas build --platform android --non-interactive
 
       # build iOS:
       #   run: eas build --platform ios --non-interactive
