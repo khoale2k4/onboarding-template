@@ -60,11 +60,6 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EAS_ACCESS_TOKEN }}
 
-      - name: Check Expo Token
-        run: echo "EXPO_TOKEN=$EXPO_TOKEN"
-        env:
-          EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
-
       # Upload to stores
       # - name: Submit to app stores
       #   run: eas submit --platform android --non-interactive
@@ -73,7 +68,7 @@ jobs:
 
       - name: Expo Publish
         run: |
-          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" --json > update.json
+          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" --verbose
 
           ANDROID_URL=$(jq -r '.[] | select(.platform=="android") | .manifestPermalink' update.json)
           IOS_URL=$(jq -r '.[] | select(.platform=="ios") | .manifestPermalink' update.json)
