@@ -70,9 +70,9 @@ jobs:
         run: |
           CI=1 eas update --branch production --message "Auto publish from GitHub Actions" | tee update.log
 
-          ANDROID_URL=$(grep 'Android update ID' update.log -A 1 | grep 'EAS Dashboard' -B 1 | tail -n1 | awk '{print $NF}')
-          IOS_URL=$(grep 'iOS update ID' update.log -A 1 | grep 'EAS Dashboard' -B 1 | tail -n1 | awk '{print $NF}')
-
+          ANDROID_URL=$(grep -o 'https://u\.expo\.dev/update/[a-z0-9-]\+' update.log | head -n1)
+          IOS_URL=$(grep -o 'https://u\.expo\.dev/update/[a-z0-9-]\+' update.log | tail -n1)
+          
           echo "ANDROID_URL=$ANDROID_URL" >> $GITHUB_ENV
           echo "IOS_URL=$IOS_URL" >> $GITHUB_ENV
 
