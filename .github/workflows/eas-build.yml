@@ -68,7 +68,7 @@ jobs:
 
       - name: Expo Publish
         run: |
-          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" --verbose
+          CI=1 eas update --branch production --message "Auto publish from GitHub Actions"
 
           ANDROID_URL=$(jq -r '.[] | select(.platform=="android") | .manifestPermalink' update.json)
           IOS_URL=$(jq -r '.[] | select(.platform=="ios") | .manifestPermalink' update.json)
