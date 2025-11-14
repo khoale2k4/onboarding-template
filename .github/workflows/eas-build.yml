@@ -44,13 +44,16 @@ jobs:
     environment: EAS publish
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - run: npm ci --include=dev
+      - name: Install dependencies
+        run: npm ci --include=dev
 
       - uses: expo/expo-github-action@v8
         with:
@@ -65,7 +68,7 @@ jobs:
 
       - name: Expo Publish
         run: |
-          eas update --branch production --message "Auto publish from GitHub Actions" --json > update.json
+          eas update --branch main --message "Auto publish from GitHub Actions" --non-interactive --json > update.json
           OTA_URL=$(jq -r '.updateUrl' update.json)
           echo "OTA_URL=$OTA_URL" >> $GITHUB_ENV
         env:
