@@ -64,6 +64,50 @@ yarn start
 
 ---
 
+## Triển khai với EAS (Expo Application Services)
+
+Để tạo bản build (file ```.apk``` hoặc ```.ipa```) và gửi lên các cửa hàng ứng dụng, bạn có thể sử dụng Expo Application Services (EAS).
+
+1. Cài đặt EAS CLI (nếu chưa có):
+
+```Bash
+npm install -g eas-cli
+```
+
+2. Đăng nhập vào tài khoản Expo:
+
+```Bash
+eas login
+```
+
+3. Cấu hình dự án cho EAS (chỉ chạy lần đầu):
+
+```Bash
+eas build:configure
+```
+
+4. Thao tác này sẽ tạo ra file eas.json trong dự án của bạn.
+
+Bắt đầu quá trình build:
+
+```Bash
+eas build
+```
+
+5. Bạn cũng có thể chỉ định nền tảng cụ thể:
+
+```Bash
+eas build --platform android
+# hoặc
+eas build --platform ios
+```
+
+**Ghi chú quan trọng**: Trong lần đầu chạy eas build hoặc khi cấu hình credentials, EAS sẽ hỏi bạn rất nhiều câu hỏi xác nhận (ví dụ: tạo keystore mới, quản lý provisioning profile...). Như bạn đã đề cập, nếu bạn muốn chấp nhận các lựa chọn mặc định do EAS đề xuất, bạn có thể sẽ cần chọn Y (Yes) liên tục cho đến khi quá trình build bắt đầu.
+
+Sau khi build thành công, bạn sẽ nhận được một liên kết để tải về file cài đặt.
+
+---
+
 ## Thư mục chính
 ```bash
 MyApp/
