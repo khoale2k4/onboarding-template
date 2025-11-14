@@ -41,6 +41,7 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    environment: EAS publish
 
     steps:
       - uses: actions/checkout@v3
