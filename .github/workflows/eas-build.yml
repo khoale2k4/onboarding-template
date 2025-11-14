@@ -60,6 +60,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EAS_ACCESS_TOKEN }}
 
+      - name: Check Expo Token
+        run: echo "EXPO_TOKEN=$EXPO_TOKEN"
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
+
       # Upload to stores
       # - name: Submit to app stores
       #   run: eas submit --platform android --non-interactive
