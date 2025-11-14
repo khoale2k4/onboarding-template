@@ -68,16 +68,18 @@ jobs:
 
       - name: Expo Publish
         run: |
-          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" --json > update.json
+          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" | tee update.log
 
-          ANDROID_URL=$(jq -r '.[] | select(.platform=="android") | .manifestPermalink' update.json)
-          IOS_URL=$(jq -r '.[] | select(.platform=="ios") | .manifestPermalink' update.json)
+          ANDROID_URL=$(grep 'Android update ID' update.log -A 1 | grep 'EAS Dashboard' -B 1 | tail -n1 | awk '{print $NF}')
+          IOS_URL=$(grep 'iOS update ID' update.log -A 1 | grep 'EAS Dashboard' -B 1 | tail -n1 | awk '{print $NF}')
 
           echo "ANDROID_URL=$ANDROID_URL" >> $GITHUB_ENV
           echo "IOS_URL=$IOS_URL" >> $GITHUB_ENV
 
           echo "Android OTA URL: $ANDROID_URL"
           echo "iOS OTA URL: $IOS_URL"
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
 
       - name: Update README with OTA link
         run: |
