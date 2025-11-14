@@ -67,31 +67,6 @@ jobs:
       #     EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
 
       - name: Expo Publish
-        run: |
-          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" | tee update.log
-
-          ANDROID_URL=$(grep -o 'https://u\.expo\.dev/update/[a-z0-9-]\+' update.log | head -n1)
-          IOS_URL=$(grep -o 'https://u\.expo\.dev/update/[a-z0-9-]\+' update.log | tail -n1)
-          
-          echo "ANDROID_URL=$ANDROID_URL" >> $GITHUB_ENV
-          echo "IOS_URL=$IOS_URL" >> $GITHUB_ENV
-
-          echo "Android OTA URL: $ANDROID_URL"
-          echo "iOS OTA URL: $IOS_URL"
+        run: eas update --branch production --message "Auto publish from GitHub Actions" 
         env:
           EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
-
-      - name: Update README with OTA link
-        run: |
-          sed -i "s|ANDROID_OTA_URL|$ANDROID_URL|g" readme.md
-          sed -i "s|IOS_OTA_URL|$IOS_URL|g" readme.md
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add readme.md
-          git commit -m "Update readme with latest OTA links"
-          git push
-        env:
-          ANDROID_URL: ${{ env.ANDROID_URL }}
-          IOS_URL: ${{ env.IOS_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
