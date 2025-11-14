@@ -68,25 +68,28 @@ jobs:
 
       - name: Expo Publish
         run: |
-          eas update --branch main --message "Auto publish from GitHub Actions" --non-interactive --json > update.json
-          OTA_URL=$(jq -r '.updateUrl' update.json)
-          echo "OTA_URL=$OTA_URL" >> $GITHUB_ENV
-        env:
-          EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
+          CI=1 eas update --branch production --message "Auto publish from GitHub Actions" --json > update.json
+
+          ANDROID_URL=$(jq -r '.[] | select(.platform=="android") | .manifestPermalink' update.json)
+          IOS_URL=$(jq -r '.[] | select(.platform=="ios") | .manifestPermalink' update.json)
+
+          echo "ANDROID_URL=$ANDROID_URL" >> $GITHUB_ENV
+          echo "IOS_URL=$IOS_URL" >> $GITHUB_ENV
+
+          echo "Android OTA URL: $ANDROID_URL"
+          echo "iOS OTA URL: $IOS_URL"
 
       - name: Update README with OTA link
         run: |
-          echo "Updating README.md with latest OTA link..."
-          sed -i "s|<!-- OTA_LINK -->|[Open Latest Build]($OTA_URL)|" README.md
+          sed -i "s|ANDROID_OTA_URL|$ANDROID_URL|g" README.md
+          sed -i "s|IOS_OTA_URL|$IOS_URL|g" README.md
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           git add README.md
-          git commit -m "Update README with latest OTA link"
+          git commit -m "Update README with latest OTA links"
           git push
-
         env:
-          OTA_URL: ${{ env.OTA_URL }}
+          ANDROID_URL: ${{ env.ANDROID_URL }}
+          IOS_URL: ${{ env.IOS_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

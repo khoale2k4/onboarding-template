@@ -1,6 +1,9 @@
 # OTA Qr
 
-Latest OTA build: <!-- OTA_LINK -->
+Latest OTA build: 
+- Android: ANDROID_OTA_URL
+- iOS: IOS_OTA_URL
+
 
 # My Expo App
 
