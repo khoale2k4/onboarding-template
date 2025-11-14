@@ -44,12 +44,7 @@ yarn install
 1. Khởi chạy dev server:
 
 ``` bash
-npm run start
-```
-hoặc:
-
-```bash
-yarn start
+npx expo start
 ```
 
 2. Mở Expo Go trên điện thoại.
@@ -63,6 +58,46 @@ yarn start
 - Lần tiếp theo → sẽ trực tiếp vào Home Screen.
 
 ---
+
+## Tùy chọn nâng cao & Gỡ rối
+
+Nếu bạn không thể kết nối cùng mạng Wi-Fi hoặc muốn chạy qua cáp, hãy tham khảo các tùy chọn dưới đây.
+
+1. Chạy qua Tunnel (Nếu không cùng Wi-Fi)
+Nếu bạn ở khác mạng Wi-Fi (ví dụ: dùng 4G), bạn có thể dùng "tunnel" để public dev server của mình.
+
+Thêm cờ ```--tunnel``` vào lệnh khởi động:
+
+```Bash
+npx expo start --tunnel
+```
+
+**Gặp lỗi khi chạy tunnel?** 
+Nếu bạn nhận được lỗi CommandError: Install @expo/ngrok@^4.1.0 and try again, hãy chạy lệnh sau để cài đặt dependency bị thiếu:
+
+```Bash
+npm install @expo/ngrok --save-dev
+```
+
+2. Chạy qua cáp USB (Dành cho Android)
+
+Để có kết nối ổn định và nhanh hơn, bạn có thể chạy qua cáp USB (yêu cầu đã cài đặt Android ADB).
+
+1. Cắm điện thoại Android của bạn vào máy tính qua cáp USB và bật chế độ "USB Debugging".
+
+2. Chạy lệnh sau trên terminal (mở một terminal mới) để map cổng:
+
+```Bash
+adb reverse tcp:8081 tcp:8081
+```
+
+3. Quay lại terminal đang chạy npm run start (từ bước 1 chính).
+
+4. Nhấn tổ hợp phím Shift + A.
+
+5. Một danh sách các thiết bị Android đã kết nối sẽ hiện ra, chọn thiết bị của bạn để chạy ứng dụng.
+
+--
 
 ## Triển khai với EAS (Expo Application Services)
 
