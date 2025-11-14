@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # runs-on: macos-latest # nếu build iOS
     environment: EAS publish
 
     steps:
@@ -20,7 +21,7 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --include=dev
 
       - name: Setup Expo
         uses: expo/expo-github-action@v8
@@ -28,19 +29,60 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EAS_ACCESS_TOKEN }}
 
-      - name: EAS Build (Preview)
-        run: eas build --platform android --non-interactive
+      # - name: EAS Build (Preview)
+      #   run: eas build --platform android --non-interactive
 
-        # build iOS:
-        # run: eas build --platform ios --non-interactive
+      # build iOS:
+      #   run: eas build --platform ios --non-interactive
 
-        # Build cả hai:
-        # run: eas build --platform all --non-interactive
+      # Build cả hai:
+      #   run: eas build --platform all --non-interactive
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm ci --include=dev
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EAS_ACCESS_TOKEN }}
 
       # Upload to stores
       # - name: Submit to app stores
       #   run: eas submit --platform android --non-interactive
+      #   env:
+      #     EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
 
       - name: Expo Publish
-        run: eas update --branch production --message "Auto publish from GitHub Actions"
+        run: |
+          eas update --branch production --message "Auto publish from GitHub Actions" --json > update.json
+          OTA_URL=$(jq -r '.updateUrl' update.json)
+          echo "OTA_URL=$OTA_URL" >> $GITHUB_ENV
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
+
+      - name: Update README with OTA link
+        run: |
+          echo "Updating README.md with latest OTA link..."
+          sed -i "s|<!-- OTA_LINK -->|[Open Latest Build]($OTA_URL)|" README.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+          git commit -m "Update README with latest OTA link"
+          git push
+
+        env:
+          OTA_URL: ${{ env.OTA_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

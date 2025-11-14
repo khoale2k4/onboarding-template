@@ -1,3 +1,7 @@
+# OTA Qr
+
+Latest OTA build: <!-- OTA_LINK -->
+
 # My Expo App
 
 Ứng dụng mẫu sử dụng **React Native + Expo** với các tính năng cơ bản:
